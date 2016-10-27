@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+var debug = true;
+
+var glob = require('glob');
+var path = require('path');
+var Mocha = require('mocha');
+var mocha = new Mocha;
+
+var acceptanceBaseDir = path.resolve(
+  path.join(__dirname, '../acceptance')
+);
+
+var files = glob.sync(
+  path.join(acceptanceBaseDir, '**/*-test.js')
+);
+
+if(debug) {
+  console.log('Running in: ' + process.cwd());
+}
+
+// mocha.reporter('dot');
+mocha.files = files;
+mocha.run();
