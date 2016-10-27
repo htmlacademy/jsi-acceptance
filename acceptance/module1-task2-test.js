@@ -2,24 +2,9 @@ var expect = require('chai').expect;
 var path = require('path');
 var fs = require('fs');
 var config = require('..').config;
+var load = require('..').load;
 
 var checkJs = path.resolve('src/js/check.js');
-var getMessageFunction = function() {
-  var jsCode = fs.readFileSync(checkJs, 'utf8').toString();
-  var window = { eval: function() {}, document: null };
-  var fn, getMessage;
-
-  var previousFn = global.getMessage;
-
-  (function() {
-    eval(jsCode);
-    fn = getMessage || global.getMessage || window.getMessage;
-  })();
-
-  global.getMessage = previousFn;
-
-  return fn;
-};
 
 describe('Начинаем программировать', function() {
   it('Файл src/js/check.js должен быть создан', function() {
@@ -31,7 +16,7 @@ describe('Начинаем программировать', function() {
 
     beforeEach(function() {
       if(!getMessage) {
-        getMessage = getMessageFunction();
+        getMessage = load(checkJs).getMessage;
       }
     });
 
