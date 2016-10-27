@@ -8,6 +8,4 @@ describe('Файловая система', function() {
 
     expect(fs.statSync(jsDir).isDirectory()).to.be.ok;
   });
-
-
 });

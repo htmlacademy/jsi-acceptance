@@ -2,7 +2,7 @@
   "name": "jsi-acceptance",
   "version": "1.0.0",
   "description": "Acceptance tests for javascript intensive",
-  "main": "index.js",
+  "main": "lib/index.js",
   "bin": {
     "jsi-acceptance": "bin/acceptance-tests"
   },
