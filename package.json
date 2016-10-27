@@ -1,5 +1,5 @@
 {
-  "name": "jsi-acceptance",
+  "name": "@htmlacademy/jsi-acceptance",
   "version": "1.0.0",
   "description": "Acceptance tests for javascript intensive",
   "main": "lib/index.js",
