@@ -14,10 +14,8 @@ describe('Начинаем программировать', function() {
   context('Функция getMessage', function() {
     var getMessage;
 
-    beforeEach(function() {
-      if(!getMessage) {
-        getMessage = load(checkJs).getMessage;
-      }
+    before(function() {
+      getMessage = load(checkJs).getMessage;
     });
 
     it('Должна быть определена', function() {
