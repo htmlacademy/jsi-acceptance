@@ -2,13 +2,14 @@
 
 var path = require('path');
 var expect = require('chai').expect;
-var l = require('../lib/load');
+var load = require('../lib/load');
 
 var loadFixture = function(name) {
-  return l(
+  return load(
     path.resolve(
       path.join(__dirname, 'fixtures/load', name + '.js')
-    )
+    ),
+    ['hello']
   );
 };
 
