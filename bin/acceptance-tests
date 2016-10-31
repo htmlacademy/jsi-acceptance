@@ -6,19 +6,37 @@ var glob = require('glob');
 var path = require('path');
 var Mocha = require('mocha');
 var mocha = new Mocha;
+var config = require('..').config;
+var testsMask;
+
+if(config.isCodeAndMagick()) {
+  testsMask = '{common,code-and-magick}/**/*-test.js';
+} else if(config.isKekstagram()) {
+  testsMask = '{common,kekstagram}/**/*-test.js';
+}
+
+if(!testsMask) {
+  throw new Error('Неизвестный тип проекта');
+}
 
 var acceptanceBaseDir = path.resolve(
   path.join(__dirname, '../acceptance')
 );
 
 var files = glob.sync(
-  path.join(acceptanceBaseDir, '**/*-test.js')
+  path.join(acceptanceBaseDir, testsMask)
 );
 
 if(debug) {
   console.log('Running in: ' + process.cwd());
+  if(config.isCodeAndMagick()) {
+    console.log('Project type: code-and-magick');
+  }
+  if(config.isKekstagram()) {
+    console.log('Project type: kekstagram');
+  }
 }
 
-// mocha.reporter('dot');
+mocha.reporter('dot');
 mocha.files = files;
 mocha.run();
