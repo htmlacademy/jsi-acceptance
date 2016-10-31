@@ -15,7 +15,7 @@ describe('Начинаем программировать', function() {
     var getMessage;
 
     before(function() {
-      getMessage = load(checkJs).getMessage;
+      getMessage = load(checkJs, ['getMessage']).getMessage;
     });
 
     it('Должна быть определена', function() {
