@@ -70,5 +70,13 @@ describe('MockContext', function() {
     it('should report sequence', function() {
       expect(ctx.hasSequence('beginPath', 'closePath')).to.be.ok;
     });
+
+    it('should not report sequence for same call', function() {
+      expect(ctx.hasSequence('beginPath', 'beginPath')).to.not.be.ok;
+    });
+
+    it('should not report sequence for wrong order', function() {
+      expect(ctx.hasSequence('closePath', 'beginPath')).to.not.be.ok;
+    });
   });
 });
