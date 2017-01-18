@@ -18,7 +18,10 @@ describe('Начинаем программировать:', function() {
         'fireballSize',
         'getFireballSpeed',
         'wizardSpeed',
-        'wizardWidth'
+        'wizardWidth',
+        'getWizardHeight',
+        'getWizardX',
+        'getWizardY'
       ]);
     });
 
@@ -54,6 +57,56 @@ describe('Начинаем программировать:', function() {
       });
     });
 
+    context('getWizardHeight', function() {
+      it('должна быть функцией', function() {
+        expect(content.getWizardHeight).to.be.a('function');
+      });
 
+      context('если wizardWidth == 70', function() {
+        it('должна возвращать число от 93 до 94', function() {
+          var value = content.getWizardHeight();
+
+          expect(value).to.be.lt(94);
+          expect(value).to.be.gt(93);
+        });
+      });
+
+      context('если wizardWidth == 0', function() {
+        it('должна возвращать 0', function() {
+          var getWizardHeight = load(configJs, ['getWizardHeight'], {wizardWidth: 0}).getWizardHeight;
+          expect(getWizardHeight()).to.eq(0);
+        });
+      });
+    });
+
+    context('getWizardX', function() {
+      var getWizardX;
+
+      beforeEach(function() { getWizardX = content.getWizardX; });
+
+      it('должна быть функцией', function() {
+        expect(getWizardX).to.be.a('function');
+      });
+
+      it('должна возвращать половину ширины', function() {
+        expect(getWizardX(100)).to.be.closeTo(50, 0.001);
+        expect(getWizardX(1000)).to.be.closeTo(500, 0.001);
+      });
+    });
+
+    context('getWizardY', function() {
+      var getWizardY;
+
+      beforeEach(function() { getWizardY = content.getWizardY; });
+
+      it('должна быть функцией', function() {
+        expect(getWizardY).to.be.a('function');
+      });
+
+      it('должна возвращать 2/3 от высоты', function() {
+        expect(getWizardY(600)).to.be.closeTo(400, 0.001);
+        expect(getWizardY(6000)).to.be.closeTo(4000, 0.001);
+      });
+    });
   });
 });
