@@ -6,7 +6,7 @@ var glob = require('glob');
 var path = require('path');
 var Mocha = require('mocha');
 var mocha = new Mocha;
-var config = require('..').config;
+var config = require('..').config();
 var testsMask;
 
 if (config.isCodeAndMagick()) {
