@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-var CodeWrapper = require('../../lib/load/code-wrapper');
+var CodeWrapper = require('../..').CodeWrapper;
 
 describe('CodeWrapper', function() {
   var wrapper;
