@@ -6,13 +6,16 @@ var glob = require('glob');
 var path = require('path');
 var Mocha = require('mocha');
 var mocha = new Mocha;
-var config = require('..').config;
+var config = require('..').config();
 var testsMask;
 
-if(config.isCodeAndMagick()) {
+if (config.isCodeAndMagick()) {
+  // Учебный проект
   testsMask = '{common,code-and-magick}/**/*-test.js';
-} else if(config.isKekstagram()) {
+} else if (config.isKekstagram()) {
   testsMask = '{common,kekstagram}/**/*-test.js';
+} else if (config.isKeksobooking()) {
+  testsMask = '{common,keksobooking}/**/*-test.js';
 }
 
 if(!testsMask) {
@@ -34,6 +37,9 @@ if(debug) {
   }
   if(config.isKekstagram()) {
     console.log('Project type: kekstagram');
+  }
+  if (config.isKeksobooking()) {
+    console.log('Project type: keksobooking');
   }
 }
 

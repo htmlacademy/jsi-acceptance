@@ -1,59 +1,111 @@
-// acceptance/code-and-magick/module1-task2-test.js
-
 var expect = require('chai').expect;
 var path = require('path');
 var fs = require('fs');
 var load = require('../..').load;
 
-var checkJs = path.resolve('src/js/check.js');
+var configJs = path.resolve('js/config.js');
 
-describe('Начинаем программировать', function() {
-  it('Файл src/js/check.js должен быть создан', function() {
-    expect(fs.statSync(checkJs).isFile()).to.be.ok;
+describe('Начинаем программировать:', function() {
+  var content;
+
+  it('Файл js/config.js должен быть создан', function() {
+    expect(fs.statSync(configJs).isFile()).to.be.ok;
   });
 
-  context('Функция getMessage', function() {
-    var getMessage;
-
-    before(function() {
-      getMessage = load(checkJs, ['getMessage']).getMessage;
+  context('Содержимое config.js:', function() {
+    beforeEach(function() {
+      content = load(configJs, [
+        'fireballSize',
+        'getFireballSpeed',
+        'wizardSpeed',
+        'wizardWidth',
+        'getWizardHeight',
+        'getWizardX',
+        'getWizardY'
+      ]);
     });
 
-    it('Должна быть определена', function() {
-      expect(getMessage).to.be.a('function');
+    context('fireballSize', function() {
+      it('должен быть равен 22', function() {
+        expect(content.fireballSize).to.eq(22);
+      });
     });
 
-    context('Проверяем работу функции', function() {
-      it('a === true', function() {
-        expect(getMessage(true, 'дерево')).to.
-          eq('Я попал в дерево');
+    context('getFireballSpeed', function() {
+      it('должна быть функцией', function() {
+        expect(content.getFireballSpeed).to.be.a('function');
       });
 
-      it('a === false', function() {
-        expect(getMessage(false)).to.
-          eq('Я никуда не попал');
+      it('должна возвращать 5, если первый параметр — true', function() {
+        expect(content.getFireballSpeed(true)).to.eq(5);
       });
 
-      it('a - число', function() {
-        expect(getMessage(6, 9)).to.eq(
-          'Я прыгнул на 600 сантиметров'
-        );
+      it('должна возвращать 2, если первый параметр — false', function() {
+        expect(content.getFireballSpeed(false)).to.eq(2);
+      });
+    });
+
+    context('wizardSpeed', function() {
+      it('должна быть равна 3', function() {
+        expect(content.wizardSpeed).to.eq(3);
+      });
+    });
+
+    context('wizardWidth', function() {
+      it('должна быть равна 70', function() {
+        expect(content.wizardWidth).to.eq(70);
+      });
+    });
+
+    context('getWizardHeight', function() {
+      it('должна быть функцией', function() {
+        expect(content.getWizardHeight).to.be.a('function');
       });
 
-      it('a - массив', function() {
-        expect(getMessage([1, 2, 3, 4])).to.eq(
-          'Я прошёл 10 шагов'
-        );
+      context('если wizardWidth == 70', function() {
+        it('должна возвращать число от 93 до 94', function() {
+          var value = content.getWizardHeight();
+
+          expect(value).to.be.lt(94);
+          expect(value).to.be.gt(93);
+        });
       });
 
-      it('a и b - массивы', function() {
-        expect(getMessage([1, 2, 3, 4], [2, 2, 2, 2])).to.eq(
-          'Я прошёл 20 метров'
-        );
+      context('если wizardWidth == 0', function() {
+        it('должна возвращать 0', function() {
+          var getWizardHeight = load(configJs, ['getWizardHeight'], {wizardWidth: 0}).getWizardHeight;
+          expect(getWizardHeight()).to.eq(0);
+        });
+      });
+    });
+
+    context('getWizardX', function() {
+      var getWizardX;
+
+      beforeEach(function() { getWizardX = content.getWizardX; });
+
+      it('должна быть функцией', function() {
+        expect(getWizardX).to.be.a('function');
       });
 
-      it('a - объект, не массив', function() {
-        expect(getMessage({})).to.eq('Переданы некорректные данные');
+      it('должна возвращать половину ширины', function() {
+        expect(getWizardX(100)).to.be.closeTo(50, 0.001);
+        expect(getWizardX(1000)).to.be.closeTo(500, 0.001);
+      });
+    });
+
+    context('getWizardY', function() {
+      var getWizardY;
+
+      beforeEach(function() { getWizardY = content.getWizardY; });
+
+      it('должна быть функцией', function() {
+        expect(getWizardY).to.be.a('function');
+      });
+
+      it('должна возвращать 2/3 от высоты', function() {
+        expect(getWizardY(600)).to.be.closeTo(400, 0.001);
+        expect(getWizardY(6000)).to.be.closeTo(4000, 0.001);
       });
     });
   });
