@@ -103,9 +103,9 @@ describe('Начинаем программировать:', function() {
         expect(getWizardY).to.be.a('function');
       });
 
-      it('должна возвращать 2/3 от высоты', function() {
-        expect(getWizardY(600)).to.be.closeTo(400, 0.001);
-        expect(getWizardY(6000)).to.be.closeTo(4000, 0.001);
+      it('должна возвращать 1/3 от высоты', function() {
+        expect(getWizardY(600)).to.be.closeTo(200, 0.001);
+        expect(getWizardY(6000)).to.be.closeTo(2000, 0.001);
       });
     });
   });
