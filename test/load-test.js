@@ -2,7 +2,9 @@
 
 var path = require('path');
 var expect = require('chai').expect;
-var load = require('../lib/load');
+var load = require('../lib/load').load;
+var loadFromHtml = require('../lib/load').loadFromHtml;
+
 
 var loadFixture = function(name, overrides) {
   return load(
@@ -40,5 +42,22 @@ describe('load module', function() {
       var obj = loadFixture('hello-var', {number: 42});
       expect(obj.number).to.eq(42);
     });
+  });
+});
+
+describe('load from html', function() {
+  var results;
+
+  before(function() {
+    results = loadFromHtml(
+      path.resolve(
+        path.join(__dirname, 'fixtures/load/hello-index.html')
+      ),
+      ['answer']
+    );
+  });
+
+  it('should fetch answer\'s value', function() {
+    expect(results.answer).to.eq(42);
   });
 });

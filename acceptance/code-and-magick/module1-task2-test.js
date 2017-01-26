@@ -1,20 +1,20 @@
 var expect = require('chai').expect;
 var path = require('path');
 var fs = require('fs');
-var load = require('../..').load;
+var loadFromHtml = require('../..').loadFromHtml;
 
-var configJs = path.resolve('js/config.js');
+var indexHtml = path.resolve('index.html');
 
 describe('Начинаем программировать:', function() {
   var content;
 
-  it('Файл js/config.js должен быть создан', function() {
-    expect(fs.statSync(configJs).isFile()).to.be.ok;
+  it('Файл index.html должен быть создан', function() {
+    expect(fs.statSync(indexHtml).isFile()).to.be.ok;
   });
 
-  context('Содержимое config.js:', function() {
+  context('Содержимое index.html:', function() {
     beforeEach(function() {
-      content = load(configJs, [
+      content = loadFromHtml(indexHtml, [
         'fireballSize',
         'getFireballSpeed',
         'wizardSpeed',
@@ -73,7 +73,7 @@ describe('Начинаем программировать:', function() {
 
       context('если wizardWidth == 0', function() {
         it('должна возвращать 0', function() {
-          var getWizardHeight = load(configJs, ['getWizardHeight'], {wizardWidth: 0}).getWizardHeight;
+          var getWizardHeight = loadFromHtml(indexHtml, ['getWizardHeight'], {wizardWidth: 0}).getWizardHeight;
           expect(getWizardHeight()).to.eq(0);
         });
       });
@@ -82,30 +82,35 @@ describe('Начинаем программировать:', function() {
     context('getWizardX', function() {
       var getWizardX;
 
-      beforeEach(function() { getWizardX = content.getWizardX; });
+      before(function() {
+        // getWizardX = loadFromHtml(
+        //   indexHtml, ['getWizardX'], {wizardWidth: 0}
+        // ).getWizardX;
+        getWizardX = content.getWizardX;
+      });
 
       it('должна быть функцией', function() {
         expect(getWizardX).to.be.a('function');
       });
 
-      it('должна возвращать половину ширины', function() {
-        expect(getWizardX(100)).to.be.closeTo(50, 0.001);
-        expect(getWizardX(1000)).to.be.closeTo(500, 0.001);
+      it('результат должен быть в указанном диапазоне', function() {
+        expect(getWizardX(200)).to.be.below(136).and.above(64);
       });
     });
 
     context('getWizardY', function() {
       var getWizardY;
 
-      beforeEach(function() { getWizardY = content.getWizardY; });
+      before(function() {
+        getWizardY = content.getWizardY;
+      });
 
       it('должна быть функцией', function() {
         expect(getWizardY).to.be.a('function');
       });
 
-      it('должна возвращать 1/3 от высоты', function() {
-        expect(getWizardY(600)).to.be.closeTo(200, 0.001);
-        expect(getWizardY(6000)).to.be.closeTo(2000, 0.001);
+      it('должна возвращать примерно 1/3 от высоты', function() {
+        expect(getWizardY(300)).to.be.above(100 - 94).and.below(101);
       });
     });
   });

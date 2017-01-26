@@ -12,6 +12,7 @@ var Canvas2dMethods = [
 
   // Paths methods
   'beginPath', 'closePath', 'moveTo', 'lineTo', 'arc', 'ellipse', 'rect',
+  'bezierCurveTo',
 
   // Drawing paths methods
   'fill', 'stroke', 'clip', 'isPointInPath', 'isPointInStroke',

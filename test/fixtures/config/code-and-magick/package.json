@@ -1,3 +1,6 @@
 {
-  "name": "31415926-code-and-magick"
+  "name": "31415926",
+  "repository": {
+    "url": "git@github.com:htmlacademy-javascript/31415926-code-and-magick.git"
+  }
 }
