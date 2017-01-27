@@ -3,12 +3,6 @@ var path = require('path');
 var fs = require('fs');
 var jsdom = require('jsdom');
 
-var fireEvent = (element, type = 'change') => {
-  var evt = document.createEvent("HTMLEvents");
-  evt.initEvent(type, false, true);
-  element.dispatchEvent(evt);
-}
-
 describe('К делу!', () => {
   var formJs = path.resolve('js/form.js');
 
@@ -150,7 +144,7 @@ describe('К делу!', () => {
       var timeValues, timeoutValues;
       var valueIdx;
 
-      before(() => {
+      beforeEach(() => {
         time = qs('#time');
         timeout = qs('#timeout');
 
@@ -165,6 +159,99 @@ describe('К делу!', () => {
 
       it('должны быть синхронизированы', () => {
         expect(timeout.value).to.eq(timeoutValues[valueIdx]);
+      });
+    });
+
+    context('тип жилья', () => {
+      var type, typeValues;
+      var price;
+
+      beforeEach(() => {
+        type = qs('#type');
+        typeValues = Array.from(type.querySelectorAll('option')).map((o) => o.value);
+
+        price = qs('#price');
+      });
+
+      context('«лачуга»', () => {
+        beforeEach(() => { 
+          type.value = typeValues[1];
+          fireEvent(type, 'change');
+        });
+
+        it('устанавливает минимальную цену в 0', () => {
+          expect(+price.min).to.eq(0);
+        });
+      });
+
+      context('«квартира»', () => {
+        beforeEach(() => { 
+          type.value = typeValues[1];
+          fireEvent(type, 'change');
+          type.value = typeValues[0];
+          fireEvent(type, 'change');
+        });
+
+        it('устанавливает минимальную цену в 1000', () => {
+          expect(+price.min).to.eq(1000);
+        });
+      });
+
+      context('«дворец»', () => {
+        beforeEach(() => { 
+          type.value = typeValues[2];
+          fireEvent(type, 'change');
+        });
+
+        it('устанавливает минимальную цену в 10000', () => {
+          expect(+price.min).to.eq(10000);
+        });
+      });
+    });
+
+    context('количество комнат и гостей', () => {
+      var rooms, guests;
+      var roomValues, guestValues;
+
+      beforeEach(() => {
+        rooms = qs('#room_number');
+        guests = qs('#capacity');
+
+        roomValues = Array.from(rooms.querySelectorAll('option')).map((o) => o.value);
+        guestValues = Array.from(guests.querySelectorAll('option')).map((o) => o.value);
+      });
+
+      context('1 комната', () => {
+        beforeEach(() => {
+          rooms.value = roomValues[0];
+          fireEvent(rooms);
+        });
+
+        it('— «не для гостей»', () => {
+          expect(guests.value).to.eq(guestValues[1]);
+        });
+      });
+
+      context('2 комнаты', () => {
+        beforeEach(() => {
+          rooms.value = roomValues[1];
+          fireEvent(rooms);
+        });
+
+        it('— «для 3 гостей»', () => {
+          expect(guests.value).to.eq(guestValues[0]);
+        });
+      });
+
+      context('3 комнаты', () => {
+        beforeEach(() => {
+          rooms.value = roomValues[2];
+          fireEvent(rooms);
+        });
+
+        it('— «для 3 гостей»', () => {
+          expect(guests.value).to.eq(guestValues[0]);
+        });
       });
     });
   });
