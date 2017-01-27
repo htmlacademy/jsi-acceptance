@@ -6,35 +6,23 @@ var jsdom = require('jsdom');
 describe('К делу!', () => {
   var formJs = path.resolve('js/form.js');
 
-  var code = (`
-    <html>
-      <head>
-        <style>
-          .pin { width: 20px; height: 20px; }
-        </style>
-      </head>
-      <body>
-        <div class="pin pin-1">Pin1</div>
-        <div class="pin pin-2">Pin2</div>
-
-        <div class="dialog">
-          <div class="dialog__close">x</div>
-        </div>
-      </body>
-    </html>
-  `);
-
   it('Файл js/form.js должен быть создан', function() {
     expect(fs.statSync(formJs).isFile()).to.be.ok;
   });
 
   context('При загрузке index.html', () => {
-    var doc, qs;
+    var doc, qs, qsa;
 
     beforeEach((done) => {
-      jsdom.env(code, ['js/form.js'], (err, window) => {
-        doc = window.document;
-        qs = doc.querySelector.bind(doc);
+      jsdom.env('index.html', ['js/form.js'], (err, window) => {
+        if(err) {
+          console.error(err.stack.toString());
+        } else {
+          doc = window.document;
+          qs = doc.querySelector.bind(doc);
+          qsa = doc.querySelectorAll.bind(doc);
+        }
+
         done();
       });
     });
@@ -44,8 +32,8 @@ describe('К делу!', () => {
       var closeDialog, dialog;
 
       beforeEach(() => {
-        pin1 = qs('.pin-1');
-        pin2 = qs('.pin-2');
+        pin1 = qsa('.pin')[0];
+        pin2 = qsa('.pin')[1];
 
         dialog = qs('.dialog');
         closeDialog = qs('.dialog__close');
@@ -77,7 +65,6 @@ describe('К делу!', () => {
       });
 
       context('click(.dialog__close)', () => {
-
         beforeEach(() => { 
           closeDialog.click();
         });
@@ -90,6 +77,58 @@ describe('К делу!', () => {
         it('pin-1 должен стать неактивным', () => {
           expect(pin1.classList.contains('pin--active')).to.not.be.ok;
         });
+      });
+    });
+
+    context('заголовок объявления', () => {
+      var title;
+      
+      beforeEach(() => {
+        title = doc.querySelector('#title');
+      });
+
+      it('должен быть обязательным полем', () => {
+        expect(title.required).to.be.ok;
+      });
+
+      it('минимальная длина 30 символов', () => {
+        expect(+title.minlength).to.eq(30);
+      });
+
+      it('максимальная длина 100 символов', () => {
+        expect(+title.maxlength).to.eq(100);
+      });
+    });
+
+    context('цена за ночь', () => {
+      var price;
+
+      beforeEach(() => { price = qs('#price'); });
+
+      it('должна быть обязательным полем', () => {
+        expect(price.required).to.be.ok;
+      });
+
+      it('должна быть числовым полем', () => {
+        expect(price.type).to.eq('number');
+      });
+
+      it('минимальное значение 1000', () => {
+        expect(+price.min).to.eq(1000);
+      });
+
+      it('максимальное значение 1000000', () => {
+        expect(+price.max).to.eq(1000000);
+      });
+    });
+
+    context('адрес', () => {
+      var address;
+
+      beforeEach(() => { address = qs('#address'); });
+
+      it('должен быть обязательным полем', () => {
+        expect(address.required).to.be.ok;
       });
     });
   });
