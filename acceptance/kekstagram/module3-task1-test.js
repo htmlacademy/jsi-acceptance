@@ -60,6 +60,21 @@ describe('К делу!', () => {
       it('форма кадрирования должна появиться', () => {
         expect(overlay.classList.contains('invisible')).to.not.be.ok;
       });
+
+      context('закрытие формы кадрирования', () => {
+        beforeEach(() => {
+          var cancel = qs('.upload-form-cancel');
+          cancel.click();
+        });
+
+        it('форма кадрирования должна исчезнуть', () => {
+          expect(overlay.classList.contains('invisible')).to.be.ok;
+        });
+
+        it('форма загрузки должна появиться', () => {
+          expect(uploadForm.classList.contains('invisible')).to.not.be.ok;
+        });
+      });
     });
   });    
 });
