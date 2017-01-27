@@ -6,6 +6,10 @@
   "bin": {
     "jsi-acceptance": "bin/acceptance-tests"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:htmlacademy/jsi-acceptance.git"
+  },
   "scripts": {
     "test": "mocha test/*-test.js test/**/*-test.js",
     "test:watch": "mocha test/*-test.js test/**/*-test.js -w"
