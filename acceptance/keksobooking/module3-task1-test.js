@@ -3,6 +3,12 @@ var path = require('path');
 var fs = require('fs');
 var jsdom = require('jsdom');
 
+var fireEvent = (element, type = 'change') => {
+  var evt = document.createEvent("HTMLEvents");
+  evt.initEvent(type, false, true);
+  element.dispatchEvent(evt);
+}
+
 describe('К делу!', () => {
   var formJs = path.resolve('js/form.js');
 
@@ -12,6 +18,7 @@ describe('К делу!', () => {
 
   context('При загрузке index.html', () => {
     var doc, qs, qsa;
+    var fireEvent;
 
     beforeEach((done) => {
       jsdom.env('index.html', ['js/form.js'], (err, window) => {
@@ -21,6 +28,12 @@ describe('К делу!', () => {
           doc = window.document;
           qs = doc.querySelector.bind(doc);
           qsa = doc.querySelectorAll.bind(doc);
+
+          fireEvent = (element, type = 'change') => {
+            var event = doc.createEvent("HTMLEvents");
+            event.initEvent(type, false, true);
+            element.dispatchEvent(event);
+          };
         }
 
         done();
@@ -129,6 +142,29 @@ describe('К делу!', () => {
 
       it('должен быть обязательным полем', () => {
         expect(address.required).to.be.ok;
+      });
+    });
+
+    context('время заезда и время выезда', () => {
+      var time, timeout;
+      var timeValues, timeoutValues;
+      var valueIdx;
+
+      before(() => {
+        time = qs('#time');
+        timeout = qs('#timeout');
+
+        timeValues = Array.from(time.querySelectorAll('option')).map((o) => o.value);
+        timeoutValues = Array.from(timeout.querySelectorAll('option')).map((o) => o.value);
+
+        valueIdx = Math.floor(Math.random() * 2);
+
+        time.value = timeValues[valueIdx];
+        fireEvent(time);
+      });
+
+      it('должны быть синхронизированы', () => {
+        expect(timeout.value).to.eq(timeoutValues[valueIdx]);
       });
     });
   });
