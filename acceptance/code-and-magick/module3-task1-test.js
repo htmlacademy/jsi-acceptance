@@ -35,7 +35,7 @@ describe('Одеть Надежду', function () {
   var doc, setup, setupOpen, setupClose;
 
   beforeEach(function (done) {
-    jsdom.env(code, [
+    jsdom.env('index.html', [
       'js/setup.js'
     ], function(err, window) {
       doc = window.document;
@@ -79,7 +79,7 @@ describe('Одеть Надежду', function () {
       });
 
       it('имя не может быть длинее 50 символов', function () {
-        expect((+nameInput.maxlength) === 50).to.be.ok;
+        expect(+nameInput.maxLength).to.be.eq(50);
       });
     });
 

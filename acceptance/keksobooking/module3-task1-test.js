@@ -99,11 +99,11 @@ describe('К делу!', () => {
       });
 
       it('минимальная длина 30 символов', () => {
-        expect(+title.minlength).to.eq(30);
+        expect(+title.minLength).to.eq(30);
       });
 
       it('максимальная длина 100 символов', () => {
-        expect(+title.maxlength).to.eq(100);
+        expect(+title.maxLength).to.eq(100);
       });
     });
 
