@@ -43,6 +43,6 @@ if(debug) {
   }
 }
 
-// mocha.reporter('dot');
+mocha.reporter('dot');
 mocha.files = files;
 mocha.run();

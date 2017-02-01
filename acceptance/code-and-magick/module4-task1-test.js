@@ -2,6 +2,7 @@ var expect = require('chai').expect;
 var path = require('path');
 var fs = require('fs');
 var jsdom = require('jsdom');
+var utils = require('../utils');
 
 describe('Нажатие посохом', function () {
   var setup, setupForm, setupOpen, setupClose;
@@ -14,26 +15,16 @@ describe('Нажатие посохом', function () {
       'js/setup.js'
     ], function(err, window) {
       win = window;
-      doc = window.document;
+
+      utils(win, (o) => {
+        doc = o.doc;
+        fireKeyboardPress = o.fireKeyboardPress;
+      });
 
       setup = doc.querySelector('.setup');
       setupForm = doc.querySelector('.setup-wizard-form');
       setupOpen = doc.querySelector('.setup-open');
       setupClose = doc.querySelector('.setup-close');
-
-      fireKeyboardEvent = (target, type = 'keydown', key = 'Enter') => {
-        let evt = new win.KeyboardEvent(type, {
-          key: key
-        });
-
-        target.dispatchEvent(evt);
-      };
-
-      fireKeyboardPress = (target, key = 'Enter') => {
-        ['down', 'press', 'up'].forEach((t) => {
-          fireKeyboardEvent(target, `key${t}`, key);
-        });
-      };
 
       isInvisible = (elt) => {
         return elt.classList.contains('invisible');
