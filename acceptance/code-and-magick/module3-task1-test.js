@@ -4,34 +4,6 @@ var fs = require('fs');
 var jsdom = require('jsdom');
 
 describe('Одеть Надежду', function () {
-  var code = `
-    <html>
-      <body>
-        <div style="width: 20px; height: 20px;" class="setup-open">Profile</div>
-
-        <div class="setup invisible">
-          <div style="width: 20px; height: 20px;" class="setup-close">Close</a>
-
-          <input class="setup-user-name" type="text">
-
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62 86" class="setup-wizard">
-            <g id="wizard">
-              <g id="wizard-coat" style="fill: #6589a4">
-                <polygon points="19 67 19 59 14 59 14 82 9 82 9 86 23 86 23 67 19 67"></polygon>
-              </g>
-              <g id="wizard-eyes">
-                <rect x="28" y="33" width="5" height="5"></rect>
-              </g>
-          </svg>
-
-          <div class="setup-fireball-wrap">
-            <div class="setup-fireball"></div>
-          </div>
-        </div>
-      </body>
-    </html>
-  `;
-
   var doc, setup, setupOpen, setupClose;
 
   beforeEach(function (done) {
